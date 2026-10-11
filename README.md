@@ -53,22 +53,22 @@ StocksPro places no orders and uses no real capital. Everything is backtest or p
 StocksPro is a strategy lab for tokenized U.S. stocks on Bitget. A trader picks a stock such as NVDA, sets entry, exit, stop and sizing rules, and backtests on real Bitget futures candles. The same rules run twice, once with a risk harness ON and once OFF, so the value of risk control is measured, not claimed. The harness checks volatility percentile per stock, trend strength, earnings blackout, a leverage cap and a drawdown halt, and it reports every setup it blocked. Backtests never use an LLM, which removes look-ahead bias. In Live mode, Qwen proposes a trade but cannot widen stops or bypass the governor, and each decision is saved as a checksummed receipt. Live checks compare the token price with the real stock quote from Bitget MCP and veto when the gap is too large. Every number on the page carries a data-source label, and the simulation boundary is stated clearly.
 
 ## Track : AI Trading Desk 
-##Sub-theme: Decision Stress Testing
+Sub-theme: Decision Stress Testing
 
 
 ## Thesis :
 Stock markets close. Tokenized stocks don't. Every weekend and every earnings night, a small trader is left alone with a price that may not match the real stock. I believe an AI agent is only as good as the rules that can say "no". So StocksPro runs the same strategy twice on real Bitget data, once with a risk harness and once without, and shows what the harness blocked and why. Backtests use no LLM, so the past can't be peeked at. In Live mode the AI only proposes. The harness decides.
 
-Part 2 - Target user and product value
+Target user and product value -
 Assumed segment (not measured): a retail trader of tokenized U.S. stocks on Bitget perpetuals, small account, moderate risk appetite, a few trades a week. Most tools show them returns. None show what protection would have been worth.
 
-Part 3 - Validation data and key metrics
+Validation data and key metrics -
 No performance claims. Observed: about 8 months of NVDAUSDT history, taker fee 0.06%. [Paste your own measured Sharpe, max drawdown and win rate from the Lab here, labeled observed.] Targeted: out-of-sample test of 30+ days and a 2+ week paper run. No users yet.
 
-Part 4 - Progress
+Progress -
 Built: data API, backtest engine, risk harness, ON vs OFF comparison, live price-gap check. Not built yet: Qwen live proposals, receipts, scheduled paper trading. Tools: Bitget futures API, Bitget MCP, Vercel.
 
-Part 5 - Your take
+My take -
 AI trading won't be trusted for how smart it is, but for how clearly it can say no. I built StocksPro to make that visible.
 
 
