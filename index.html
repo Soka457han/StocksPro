@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StocksPro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g:#0f6b4f;--g2:#e7f3ee;--bg:#f6faf8;--card:#fff;--tx:#14231d;--mt:#5d6f67;--bd:#d6e4dd;--bad:#b3261e;--off:#8a6d1f}
+@media(prefers-color-scheme:dark){:root:not([data-t=light]){--g:#3fbf94;--g2:#12261f;--bg:#0c1511;--card:#13201a;--tx:#e6f1ec;--mt:#93a89f;--bd:#23382f;--bad:#ff8a80;--off:#e0b84f}}
+:root[data-t=dark]{--g:#3fbf94;--g2:#12261f;--bg:#0c1511;--card:#13201a;--tx:#e6f1ec;--mt:#93a89f;--bd:#23382f;--bad:#ff8a80;--off:#e0b84f}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:'Hind Siliguri',system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5;padding-top:env(safe-area-inset-top,0)}
+.w{max-width:880px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+h1{font-size:1.5rem;margin:0;color:var(--g)}h2{font-size:1.05rem;margin:0 0 8px}
+p.s{color:var(--mt);margin:4px 0 14px;font-size:.92rem}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px;margin-bottom:14px}
+.g{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:640px){.g{grid-template-columns:repeat(4,1fr)}}
+label{display:block;font-size:.8rem;color:var(--mt)}
+input,select{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx)}
+.t{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px}.t label{display:flex;gap:6px;align-items:center;color:var(--tx);font-size:.9rem}.t input{width:auto}
+button{font:inherit;font-weight:600;border:0;border-radius:999px;padding:10px 20px;background:var(--g);color:#fff;cursor:pointer}
+button.o{background:var(--g2);color:var(--g)}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+.sc{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--bd);white-space:nowrap}th:first-child,td:first-child{text-align:left}
+.src{font-size:.72rem;color:var(--mt);margin-top:6px}.on{color:var(--g)}.off{color:var(--off)}.bad{color:var(--bad)}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--g2);color:var(--g);font-size:.8rem}
+textarea{width:100%;min-height:120px;font:.8rem monospace;border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);padding:8px}
+svg{width:100%;height:auto;display:block}
+</style>
+</head>
+<body>
+<div class="w">
+<header><h1>StocksPro</h1></header>
+<p class="s">The LLM proposes, the harness decides, receipts prove it. Backtests use fixed rules only; no LLM is involved, so there is no look-ahead bias.</p>
+
+<section class="c">
+<h2>Strategy</h2>
+<div class="g">
+<div><label for="sym">Stock</label><select id="sym"><option>NVDAUSDT</option><option>METAUSDT</option><option>GOOGLUSDT</option><option>AAPLUSDT</option><option>AMZNUSDT</option><option>TSLAUSDT</option><option>MSFTUSDT</option></select></div>
+<div><label for="gran">Bar size</label><select id="gran"><option>1D</option><option>4H</option><option>1H</option></select></div>
+<div><label for="rin">Buy when RSI below</label><input id="rin" type="number" value="35"></div>
+<div><label for="rout">Sell when RSI above</label><input id="rout" type="number" value="55"></div>
+<div><label for="sl">Stop loss %</label><input id="sl" type="number" value="4" step="0.5"></div>
+<div><label for="tp">Take profit %</label><input id="tp" type="number" value="8" step="0.5"></div>
+<div><label for="ts">Time stop (bars)</label><input id="ts" type="number" value="15"></div>
+<div><label for="sz">Position size % of equity</label><input id="sz" type="number" value="50"></div>
+<div><label for="lev">Leverage you want</label><input id="lev" type="number" value="10"></div>
+<div><label for="slip">Slippage (bps)</label><input id="slip" type="number" value="5"></div>
+<div><label for="fee">Taker fee %</label><input id="fee" type="number" value="0.06" step="0.01"></div>
+<div><label for="cash">Start equity (USDT)</label><input id="cash" type="number" value="1000"></div>
+</div>
+<h2 style="margin-top:14px">Governor rules (Harness ON)</h2>
+<div class="g">
+<div><label for="gcap">Leverage cap</label><input id="gcap" type="number" value="3"></div>
+<div><label for="gvol">Block if volatility percentile above</label><input id="gvol" type="number" value="80"></div>
+<div><label for="gadx">Block if ADX above</label><input id="gadx" type="number" value="30"></div>
+<div><label for="gdd">Halt at drawdown %</label><input id="gdd" type="number" value="12"></div>
+</div>
+<div class="t">
+<label><input type="checkbox" id="tvol" checked>Volatility percentile</label>
+<label><input type="checkbox" id="tadx" checked>Trend filter (ADX)</label>
+<label><input type="checkbox" id="tear" checked>Earnings blackout (2 days)</label>
+<label><input type="checkbox" id="tlev" checked>Leverage cap</label>
+<label><input type="checkbox" id="tdd" checked>Drawdown halt</label>
+</div>
+<p style="margin:14px 0 0"><button id="run" type="button">Run backtest</button></p>
+<div class="src">Candles: Bitget USDT futures market data. Earnings dates: Bitget MCP equity_calendar. Paper backtest only, no real capital.</div>
+<div id="msg" class="src" role="status"></div>
+</section>
+
+<section class="c" id="res" hidden>
+<h2>Harness ON vs OFF</h2>
+<div id="chart"></div>
+<div class="sc"><table id="mt"></table></div>
+<h2 style="margin-top:14px">Vetoes by rule</h2>
+<div class="sc"><table id="vt"></table></div>
+<div class="src">Signals use closed bars and fill at the next bar open with taker fee and slippage. Funding is ignored (current rate 0). Sharpe uses 365 periods per year scaled by bar size.</div>
+</section>
+
+<section class="c">
+<h2>Live check</h2>
+<p class="s">Same symbol, current data. Shows the token-to-stock reference gap rule.</p>
+<button class="o" id="lv" type="button">Check live data</button>
+<div id="live" class="sc" style="margin-top:10px"></div>
+<div class="src">Perp: Bitget futures ticker. Stock quote and fear and greed: Bitget MCP. Outside US market hours the quote is the last close.</div>
+</section>
+
+<section class="c">
+<h2>Export to Playbook</h2>
+<p class="s">Copy this prompt into GetAgent Skill to run an official backtest and compare it with the Lab.</p>
+<textarea id="ex" readonly aria-label="Playbook prompt"></textarea>
+<p style="margin:8px 0 0"><button class="o" id="cp" type="button">Copy prompt</button></p>
+</section>
+</div>
+<script>
+const $=i=>document.getElementById(i);
+const PER={'1D':86400000,'4H':14400000,'1H':3600000};
+let ex=null,cal=[];
+const num=i=>+$(i).value;
+
+function rsi(b,p=14){const n=b.length,o=Array(n).fill(null);let g=0,l=0;
+for(let i=1;i<n;i++){const d=b[i][4]-b[i-1][4],u=Math.max(d,0),w=Math.max(-d,0);
+if(i<=p){g+=u;l+=w;if(i===p){g/=p;l/=p;o[i]=l?100-100/(1+g/l):100}}
+else{g=(g*(p-1)+u)/p;l=(l*(p-1)+w)/p;o[i]=l?100-100/(1+g/l):100}}return o}
+function atrp(b,p=14){const n=b.length,o=Array(n).fill(null);let a=0;
+for(let i=1;i<n;i++){const t=Math.max(b[i][2]-b[i][3],Math.abs(b[i][2]-b[i-1][4]),Math.abs(b[i][3]-b[i-1][4]));
+if(i<=p){a+=t;if(i===p){a/=p;o[i]=a/b[i][4]*100}}else{a=(a*(p-1)+t)/p;o[i]=a/b[i][4]*100}}return o}
+function adx(b,p=14){const n=b.length,o=Array(n).fill(null);let tr=0,pd=0,md=0,a=null;const dx=[];
+for(let i=1;i<n;i++){const h=b[i][2],l=b[i][3],pc=b[i-1][4];
+const t=Math.max(h-l,Math.abs(h-pc),Math.abs(l-pc)),up=h-b[i-1][2],dn=b[i-1][3]-l;
+const p1=up>dn&&up>0?up:0,m1=dn>up&&dn>0?dn:0;
+if(i<=p){tr+=t;pd+=p1;md+=m1}else{tr=tr-tr/p+t;pd=pd-pd/p+p1;md=md-md/p+m1}
+if(i>=p){const a1=100*pd/tr,a2=100*md/tr,d=100*Math.abs(a1-a2)/((a1+a2)||1);
+if(a===null){dx.push(d);if(dx.length===p){a=dx.reduce((x,y)=>x+y)/p;o[i]=a}}else{a=(a*(p-1)+d)/p;o[i]=a}}}return o}
+function volPct(v,i,w=90){const x=v[i];if(x==null)return null;let c=0,k=0;
+for(let j=Math.max(0,i-w);j<i;j++)if(v[j]!=null){k++;if(v[j]<x)c++}return k<20?null:100*c/k}
+
+function backtest(b,P,gov){
+const R=rsi(b),V=atrp(b),A=adx(b);
+const lev=gov&&P.tlev?Math.min(P.lev,P.gcap):P.lev;
+let eq=P.cash,peak=eq,pos=null,pend=null,halted=false;
+const curve=[],trades=[],veto={vol:0,adx:0,earn:0,dd:0,lev:P.lev>P.gcap?'capped at '+P.gcap+'x':'none'};
+const fee=P.fee/100,slip=P.slip/10000;
+const close=(px,i,why)=>{const ex=px*(1-slip),pnl=(ex-pos.en)*pos.q-ex*pos.q*fee;
+eq+=pnl;trades.push({pnl,why,bars:i-pos.i0});pos=null};
+const nearEarn=t=>{const d=new Date(t).toISOString().slice(0,10),ms=Date.parse(d);
+return cal.some(c=>Math.abs(Date.parse(c)-ms)<=2*86400000)};
+for(let i=0;i<b.length;i++){
+const [t,o,h,l,c]=b[i];
+if(pend==='in'&&!pos){const en=o*(1+slip),not=eq*P.sz/100*lev,q=not/en;
+eq-=en*q*fee;pos={en,q,i0:i,stop:Math.max(en*(1-P.sl/100),en*(1-0.9/lev)),tp:en*(1+P.tp/100)}}
+else if(pend==='out'&&pos)close(o,i,'signal');
+pend=null;
+if(pos){
+if(o<=pos.stop)close(o,i,'stop');
+else if(l<=pos.stop)close(pos.stop,i,'stop');
+else if(h>=pos.tp)close(pos.tp,i,'target')}
+const mtm=pos?eq+(c-pos.en)*pos.q:eq;
+curve.push(mtm);peak=Math.max(peak,mtm);
+if(gov&&P.tdd&&!halted&&(peak-mtm)/peak*100>=P.gdd)halted=true;
+if(i<120||i>=b.length-1)continue;
+if(pos){if(R[i]>P.rout||i-pos.i0>=P.ts)pend='out'}
+else if(R[i]!=null&&R[i]<P.rin){
+if(gov){
+if(halted){veto.dd++;continue}
+if(P.tvol){const vp=volPct(V,i);if(vp!=null&&vp>P.gvol){veto.vol++;continue}}
+if(P.tadx&&A[i]!=null&&A[i]>P.gadx){veto.adx++;continue}
+if(P.tear&&nearEarn(t)){veto.earn++;continue}}
+pend='in'}}
+if(pos)close(b[b.length-1][4],b.length-1,'end');
+return{curve,trades,veto,lev}}
+
+function metrics(r,P,bar){
+const c=r.curve,rets=[];for(let i=1;i<c.length;i++)rets.push(c[i]/c[i-1]-1);
+const m=rets.reduce((a,x)=>a+x,0)/(rets.length||1),sd=Math.sqrt(rets.reduce((a,x)=>a+(x-m)**2,0)/(rets.length||1));
+const ppy=365*86400000/bar;let pk=c[0],dd=0;for(const x of c){pk=Math.max(pk,x);dd=Math.max(dd,(pk-x)/pk)}
+const w=r.trades.filter(t=>t.pnl>0).length;
+return{ret:(c[c.length-1]/P.cash-1)*100,dd:dd*100,sh:sd?m/sd*Math.sqrt(ppy):0,n:r.trades.length,win:r.trades.length?w/r.trades.length*100:0,lev:r.lev}}
+
+function draw(a,b){const W=720,H=260,all=a.concat(b),mn=Math.min(...all),mx=Math.max(...all),n=a.length;
+const pt=s=>s.map((v,i)=>(i/(n-1)*(W-20)+10).toFixed(1)+','+(H-20-(v-mn)/((mx-mn)||1)*(H-40)).toFixed(1)).join(' ');
+$('chart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Equity curves"><polyline fill="none" stroke="var(--off)" stroke-width="2" points="${pt(b)}"/><polyline fill="none" stroke="var(--g)" stroke-width="2.5" points="${pt(a)}"/><text x="12" y="16" fill="var(--g)" font-size="13">Harness ON</text><text x="110" y="16" fill="var(--off)" font-size="13">Harness OFF</text></svg>`}
+
+const f=(x,d=2)=>x.toFixed(d);
+async function run(){
+const P={rin:num('rin'),rout:num('rout'),sl:num('sl'),tp:num('tp'),ts:num('ts'),sz:num('sz'),lev:Math.max(1,num('lev')),slip:num('slip'),fee:num('fee'),cash:num('cash'),
+gcap:num('gcap'),gvol:num('gvol'),gadx:num('gadx'),gdd:num('gdd'),tvol:$('tvol').checked,tadx:$('tadx').checked,tear:$('tear').checked,tlev:$('tlev').checked,tdd:$('tdd').checked};
+const s=$('sym').value,g=$('gran').value;$('msg').textContent='Loading candles…';$('run').disabled=true;
+try{
+const [cj,aj]=await Promise.all([jf(`/api/data?type=candles&symbol=${s}&gran=${g}`),jf(`/api/data?type=calendar&symbol=${s}`).catch(()=>({dates:[]}))]);
+if(!cj.bars||cj.bars.length<150)throw new Error(cj.error||'Not enough history yet for this bar size ('+((cj.bars||[]).length)+' bars, need 150; '+(cj.failedWindows||0)+' windows failed).');
+cal=aj.dates||[];
+const on=backtest(cj.bars,P,true),off=backtest(cj.bars,P,false),mo=metrics(on,P,PER[g]),mf=metrics(off,P,PER[g]);
+draw(on.curve,off.curve);
+const row=(k,a,b)=>`<tr><td>${k}</td><td class="on">${a}</td><td class="off">${b}</td></tr>`;
+$('mt').innerHTML='<tr><th></th><th>Harness ON</th><th>Harness OFF</th></tr>'+
+row('Return %',f(mo.ret),f(mf.ret))+row('Max drawdown %',f(mo.dd),f(mf.dd))+row('Sharpe',f(mo.sh),f(mf.sh))+row('Win rate %',f(mo.win,1),f(mf.win,1))+row('Trades',mo.n,mf.n)+row('Leverage used',mo.lev+'x',mf.lev+'x');
+const v=on.veto;
+$('vt').innerHTML='<tr><th>Rule</th><th>Setups blocked</th></tr>'+[['Volatility percentile',v.vol],['Trend filter (ADX)',v.adx],['Earnings blackout',v.earn],['Drawdown halt',v.dd],['Leverage cap',v.lev]].map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join('');
+$('res').hidden=false;
+$('msg').textContent=`${cj.n} bars, ${cj.from.slice(0,10)} to ${cj.to.slice(0,10)}. ${cj.failedWindows?cj.failedWindows+' windows failed to load.':''}`;
+updateEx();
+}catch(e){$('msg').innerHTML='<span class="bad">'+String(e.message||e)+'</span>'}
+$('run').disabled=false}
+$('run').onclick=run;
+const jf=async u=>{const r=await fetch(u),t=await r.text();try{return JSON.parse(t)}catch(e){throw new Error('The server sent a web page instead of data (HTTP '+r.status+'). Open your deployed Vercel site, and check that api/data.js is inside the api folder.')}};
+function updateEx(){const v=i=>$(i).value;$('ex').value=`Backtest ${v('sym')} (Bitget USDT perpetual, ${v('gran')} bars). Long only. Buy when RSI(14) < ${v('rin')}, sell when RSI(14) > ${v('rout')}. Stop loss ${v('sl')}%, take profit ${v('tp')}%, time stop ${v('ts')} bars. Position size ${v('sz')}% of equity, leverage ${v('lev')}x. Taker fee ${v('fee')}%, slippage ${v('slip')} bps. Signal on bar close, fill on next bar open. Report return, max drawdown, Sharpe, win rate and trade count.`}
+document.querySelectorAll('input,select').forEach(e=>{e.addEventListener('input',updateEx);e.addEventListener('change',updateEx)});
+updateEx();
+$('cp').onclick=async()=>{const t=$('ex').value;try{await navigator.clipboard.writeText(t);$('cp').textContent='Copied'}catch(e){$('ex').focus();$('ex').select();document.execCommand('copy');$('cp').textContent='Copied'}setTimeout(()=>$('cp').textContent='Copy prompt',1500)};
+
+$('lv').onclick=async()=>{
+const el=$('live');el.textContent='Loading…';
+try{const j=await jf('/api/data?type=live&symbol='+$('sym').value);
+const t=j.ticker,q=j.reference&&j.reference.quote,s=j.reference&&j.reference.sentiment;
+if(!t)throw new Error(j.tickerError||'No ticker data');
+let gap=null,ok=null;if(q&&q.last){gap=(t.lastPr/q.last-1)*100;ok=Math.abs(gap)<0.5}
+const R=(k,v,c='')=>`<tr><td>${k}</td><td class="${c}">${v}</td></tr>`;
+el.innerHTML='<table>'+R('Perp last price',t.lastPr)+R('Mark price',t.markPrice)+R('Funding rate',(t.fundingRate*100).toFixed(4)+'%')+
+R('Stock quote',q?q.last:'unavailable')+R('Reference gap',gap==null?'unavailable':f(gap,2)+'% (limit 0.50%)')+
+R('Gap rule',ok==null?'cannot check':ok?'Pass':'Veto','' + (ok?'on':'bad'))+R('Leverage rule',(t.maxLever||'?')+'x max on venue, our cap '+num('gcap')+'x')+
+R('Fear and greed',s?s.score+' ('+s.rating+')':'unavailable')+'</table>'
+}catch(e){el.innerHTML='<span class="bad">'+String(e.message||e)+'</span>'}};
+</script>
+</body>
+</html>
