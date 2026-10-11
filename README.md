@@ -63,7 +63,7 @@ Target user and product value -
 Assumed segment (not measured) : a retail trader of tokenized U.S. stocks on Bitget perpetuals, small account, moderate risk appetite, a few trades a week. Most tools show them returns. None show what protection would have been worth.
 
 Validation data and key metrics -
-No performance claims. Observed : about 8 months of NVDAUSDT history, taker fee 0.06%. [Paste your own measured Sharpe, max drawdown and win rate from the Lab here, labeled observed.] Targeted: out-of-sample test of 30+ days and a 2+ week paper run. No users yet.
+No performance claims, Observed : about 8 months of NVDAUSDT history, taker fee 0.06%. [Paste your own measured Sharpe, max drawdown and win rate from the Lab here, labeled observed.] Targeted: out-of-sample test of 30+ days and a 2+ week paper run. No users yet.
 
 Progress -
 Built : data API, backtest engine, risk harness, ON vs OFF comparison, live price-gap check. Not built yet: Qwen live proposals, receipts, scheduled paper trading. Tools: Bitget futures API, Bitget MCP, Vercel.
@@ -175,8 +175,8 @@ Planned: `api/propose.js` (Qwen), a receipts folder, and a scheduled GitHub Acti
 ## Run Locally
 
 ```
-git clone <REPO_URL>
-cd <repo>
+git clone https://github.com/Soka457han/StocksPro
+cd StocksPro
 npm i -g vercel
 vercel dev
 ```
