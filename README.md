@@ -9,21 +9,21 @@ Pick a tokenized stock, set the strategy parameters, backtest on real Bitget his
 - **Hackathon:** Bitget AI Hackathon, Genesis Season 2 (Builder OS)
 - **Track:** Agentic Trading
 - **Sub-theme:** Open Theme, agent evaluation and benchmarks (risk-violation rate, value over a fixed-rule baseline)
-- **Live demo:** `<LIVE_URL>` (https://stockspro.vercel.app/)
-- **Repository:** `<REPO_URL>` (https://github.com/Soka457han/StocksPro)
+- **Live demo:**  (https://stockspro.vercel.app/)
+- **Repository:**  (https://github.com/Soka457han/StocksPro)
 - **Symbols:** `NVDAUSDT`, `METAUSDT`, `GOOGLUSDT`, `AAPLUSDT`, `AMZNUSDT`, plus `TSLAUSDT`, `MSFTUSDT` (Bitget USDT perpetual futures, `isRwa`)
 - **Results:** none are claimed in this README. Run the Lab and read the numbers it shows. Add your own measured numbers here only after you have run them.
 
 ## Review In 90 Seconds
 
-1. Open the live app: `<https://stockspro.vercel.app/>`
+1. Open the live app: https://stockspro.vercel.app/
 2. Choose a stock and press **Run backtest**.
 3. Read the **Harness ON vs OFF** chart and table. Same signals, same data; only the governor differs.
 4. Read **Vetoes by rule** to see which setups the harness refused and why.
 5. Press **Check live data** to see the perp price, the U.S. stock quote, the reference gap and the gap rule verdict.
 6. Press **Copy prompt** under **Export to Playbook** and paste it into GetAgent Skill to run Bitget's own backtest for comparison.
 
-The core claim to verify:
+The core claim to verify :
 
 ```
 Signal on closed bar -> governor checks -> next-bar fill with fees and slippage -> metrics -> receipt
@@ -51,6 +51,26 @@ StocksPro places no orders and uses no real capital. Everything is backtest or p
 ## Project Description
 
 StocksPro is a strategy lab for tokenized U.S. stocks on Bitget. A trader picks a stock such as NVDA, sets entry, exit, stop and sizing rules, and backtests on real Bitget futures candles. The same rules run twice, once with a risk harness ON and once OFF, so the value of risk control is measured, not claimed. The harness checks volatility percentile per stock, trend strength, earnings blackout, a leverage cap and a drawdown halt, and it reports every setup it blocked. Backtests never use an LLM, which removes look-ahead bias. In Live mode, Qwen proposes a trade but cannot widen stops or bypass the governor, and each decision is saved as a checksummed receipt. Live checks compare the token price with the real stock quote from Bitget MCP and veto when the gap is too large. Every number on the page carries a data-source label, and the simulation boundary is stated clearly.
+
+## Track : AI Trading Desk 
+##Sub-theme: Decision Stress Testing
+
+
+## Thesis :
+Stock markets close. Tokenized stocks don't. Every weekend and every earnings night, a small trader is left alone with a price that may not match the real stock. I believe an AI agent is only as good as the rules that can say "no". So StocksPro runs the same strategy twice on real Bitget data, once with a risk harness and once without, and shows what the harness blocked and why. Backtests use no LLM, so the past can't be peeked at. In Live mode the AI only proposes. The harness decides.
+
+Part 2 - Target user and product value
+Assumed segment (not measured): a retail trader of tokenized U.S. stocks on Bitget perpetuals, small account, moderate risk appetite, a few trades a week. Most tools show them returns. None show what protection would have been worth.
+
+Part 3 - Validation data and key metrics
+No performance claims. Observed: about 8 months of NVDAUSDT history, taker fee 0.06%. [Paste your own measured Sharpe, max drawdown and win rate from the Lab here, labeled observed.] Targeted: out-of-sample test of 30+ days and a 2+ week paper run. No users yet.
+
+Part 4 - Progress
+Built: data API, backtest engine, risk harness, ON vs OFF comparison, live price-gap check. Not built yet: Qwen live proposals, receipts, scheduled paper trading. Tools: Bitget futures API, Bitget MCP, Vercel.
+
+Part 5 - Your take
+AI trading won't be trusted for how smart it is, but for how clearly it can say no. I built StocksPro to make that visible.
+
 
 ## How It Works
 
@@ -112,7 +132,8 @@ The Lab turns your parameters into a prompt for GetAgent Skill, so Bitget's sand
 | In-sample and out-of-sample split | Planned |
 | Intraday history depth back to February | Not yet tested |
 
-Update this table as items ship. Do not claim an item before it works in the live demo.
+
+
 
 ## What Is Real vs. What Is Not Claimed
 
@@ -128,6 +149,7 @@ Not claimed:
 - No Live receipts or paper trading log until the scheduled cycles are running.
 - The only reference-gap figure so far (+0.28%) came from a single probe on a Sunday, when the stock quote was probably the last close. It is not a statistic.
 
+
 ## What Is it giving :
 
 
@@ -141,7 +163,7 @@ Not claimed:
 ## Repository Structure
 
 ```
-.
+
 ├── index.html        # StocksPro Lab: UI, backtest engine, governor, live panel
 ├── api/
 │   └── data.js       # candles, live snapshot, earnings calendar (no keys)
@@ -165,6 +187,6 @@ Open the local URL it prints. No environment variables are needed for the curren
 
 ## Links
 
-- Live app: `<https://stockspro.vercel.app/>`
-- GitHub: `<https://github.com/Soka457han/StocksPro>`
+- Live app: https://stockspro.vercel.app/
+- GitHub: https://github.com/Soka457han/StocksPro
 - Bitget AI Hackathon: <https://www.bitget.com/activity-hub/hackathon>
