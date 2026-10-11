@@ -9,14 +9,14 @@ Pick a tokenized stock, set the strategy parameters, backtest on real Bitget his
 - **Hackathon:** Bitget AI Hackathon, Genesis Season 2 (Builder OS)
 - **Track:** Agentic Trading
 - **Sub-theme:** Open Theme, agent evaluation and benchmarks (risk-violation rate, value over a fixed-rule baseline)
-- **Live demo:** `<LIVE_URL>` (your Vercel URL)
-- **Repository:** `<REPO_URL>` (your GitHub repo)
+- **Live demo:** `<LIVE_URL>` (https://stockspro.vercel.app/)
+- **Repository:** `<REPO_URL>` (https://github.com/Soka457han/StocksPro)
 - **Symbols:** `NVDAUSDT`, `METAUSDT`, `GOOGLUSDT`, `AAPLUSDT`, `AMZNUSDT`, plus `TSLAUSDT`, `MSFTUSDT` (Bitget USDT perpetual futures, `isRwa`)
 - **Results:** none are claimed in this README. Run the Lab and read the numbers it shows. Add your own measured numbers here only after you have run them.
 
 ## Review In 90 Seconds
 
-1. Open the live app: `<LIVE_URL>`
+1. Open the live app: `<https://stockspro.vercel.app/>`
 2. Choose a stock and press **Run backtest**.
 3. Read the **Harness ON vs OFF** chart and table. Same signals, same data; only the governor differs.
 4. Read **Vetoes by rule** to see which setups the harness refused and why.
@@ -48,7 +48,7 @@ Most trading agents optimize for activity. StocksPro optimizes for disciplined, 
 
 StocksPro places no orders and uses no real capital. Everything is backtest or paper. It claims disciplined, reproducible simulation and verifiable refusal, not real-capital PnL or guaranteed profit. This is not financial advice.
 
-## Project Description (under 200 words)
+## Project Description
 
 StocksPro is a strategy lab for tokenized U.S. stocks on Bitget. A trader picks a stock such as NVDA, sets entry, exit, stop and sizing rules, and backtests on real Bitget futures candles. The same rules run twice, once with a risk harness ON and once OFF, so the value of risk control is measured, not claimed. The harness checks volatility percentile per stock, trend strength, earnings blackout, a leverage cap and a drawdown halt, and it reports every setup it blocked. Backtests never use an LLM, which removes look-ahead bias. In Live mode, Qwen proposes a trade but cannot widen stops or bypass the governor, and each decision is saved as a checksummed receipt. Live checks compare the token price with the real stock quote from Bitget MCP and veto when the gap is too large. Every number on the page carries a data-source label, and the simulation boundary is stated clearly.
 
@@ -128,17 +128,15 @@ Not claimed:
 - No Live receipts or paper trading log until the scheduled cycles are running.
 - The only reference-gap figure so far (+0.28%) came from a single probe on a Sunday, when the stock quote was probably the last close. It is not a statistic.
 
-## What Is New Since Season 1
+## What Is it giving :
 
-Season 1's AlphaAgent was an earlier project. This version is rebuilt around a different idea, as the S2 rules require substantive additions:
 
-- Strategy Lab with real historical backtests (new)
-- Harness ON vs OFF comparison and per-rule veto counts (new)
-- Tokenized-stock-specific rules: earnings blackout, reference-price gap, per-stock volatility percentile (new)
-- Real U.S. stock data through Bitget MCP (new)
-- Export to Playbook cross-check (new)
+- Strategy Lab with real historical backtests
+- Harness ON vs OFF comparison and per-rule veto counts 
+- Tokenized-stock-specific rules: earnings blackout, reference-price gap, per-stock volatility percentile
+- Real U.S. stock data through Bitget MCP
+- Export to Playbook cross-check
 
-Edit this list to match what you actually carried over from S1.
 
 ## Repository Structure
 
@@ -163,16 +161,10 @@ vercel dev
 
 Open the local URL it prints. No environment variables are needed for the current build. Opening `index.html` directly will not work, because `/api/data` only exists under Vercel.
 
-When the Qwen endpoint is added, set `QWEN_API_KEY` as a Vercel environment variable. Never commit keys to the repository.
 
-## Deploy
-
-1. Push `index.html` (repo root) and `api/data.js` to GitHub.
-2. Import the repo in Vercel. It deploys static pages and serverless functions with no build step.
-3. Test `<LIVE_URL>/api/data?type=live&symbol=NVDAUSDT`; it should return JSON.
 
 ## Links
 
-- Live app: `<LIVE_URL>`
-- GitHub: `<REPO_URL>`
+- Live app: `<https://stockspro.vercel.app/>`
+- GitHub: `<https://github.com/Soka457han/StocksPro>`
 - Bitget AI Hackathon: <https://www.bitget.com/activity-hub/hackathon>
